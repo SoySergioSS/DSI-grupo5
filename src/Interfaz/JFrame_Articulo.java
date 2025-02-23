@@ -197,7 +197,6 @@ public class JFrame_Articulo extends javax.swing.JFrame {
                         articulo.getDescripcion(),  // String (Texto normal)
                         articulo.getFecha(),  // String (Texto normal)
                         articulo.getIdCliente(),  // String (Texto normal)
-                        new JButton("Ver")  // Solo en la última columna hay un botón
                     };
                     modelo.addRow(datos);
                 }

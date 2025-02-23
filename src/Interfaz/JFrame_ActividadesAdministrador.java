@@ -3,9 +3,13 @@ package Interfaz;
 import CadenaDeResponsabilidad.ValidadorVacio;
 import DAO.DAOactividadImplementacion;
 import Interfaces.Validador;
+import Interfaz.JFrame_Componentes.Editor;
+import Interfaz.JFrame_Componentes.Render;
 import Logica.Actividad;
 import Main.WindowManager;
 import java.util.ArrayList;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -20,6 +24,7 @@ public class JFrame_ActividadesAdministrador extends javax.swing.JFrame {
         super.setVisible(visible);
         if (visible) {
             this.MostrarTabla();
+            System.out.println("llegaste aqui");
         }
     }
 
@@ -209,18 +214,28 @@ public class JFrame_ActividadesAdministrador extends javax.swing.JFrame {
         modelo.addColumn("Distrito");
         modelo.addColumn("fecha");
         modelo.addColumn("Usuario");
+        modelo.addColumn("Aceptado");
+        modelo.addColumn("Asistencias");
         Table_AdministrarActividades.setModel(modelo);
 
-        String[] datos = new String[6];
+        String[] datos = new String[7];
 
         for (Actividad actividad : actividades) {
+            
             datos[0] = String.valueOf(actividad.getIdActividad());
             datos[1] = actividad.getTitulo();
             datos[2] = actividad.getDescripcion();
             datos[3] = actividad.getDistrito();
             datos[4] = actividad.getFecha();
             datos[5] = String.valueOf(actividad.getIdCliente());
-            modelo.addRow(datos);
+            datos[6] = (actividad.isAceptado() == false) ? "No" : "Si";
+            if ("Si".equals(datos[6])) {
+                modelo.addRow(new Object[]{datos[0], datos[1], datos[2], datos[3], datos[4], datos[5], datos[6], "Ver"});
+                Table_AdministrarActividades.getColumnModel().getColumn(7).setCellRenderer(new Render());
+                Table_AdministrarActividades.getColumnModel().getColumn(7).setCellEditor(new Editor(new JCheckBox()));
+            } else {
+                modelo.addRow(new Object[]{datos[0], datos[1], datos[2], datos[3], datos[4], datos[5], datos[6], "-"});
+            }
         }
     }
 }

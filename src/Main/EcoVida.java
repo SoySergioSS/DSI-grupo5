@@ -4,6 +4,7 @@ import Interfaz.*;
 
 public class EcoVida {
     public static void main(String args[]) {
+
         JFrame_Actividades frameActividades = new JFrame_Actividades();
         JFrame_ActividadesAdministrador frameActividadesAdministrador = new JFrame_ActividadesAdministrador();
         JFrame_Articulo frameArticulo = new JFrame_Articulo();
