@@ -2,13 +2,15 @@
 package Interfaz;
 
 import DAO.DAOarticuloImplementacion;
-import Interfaz.JFrame_Componentes.Editor;
-import Interfaz.JFrame_Componentes.Render;
+import DAO.DAOclienteactividadImplementacion;
+import DAO.DAOclientearticuloImplementacion;
 import Logica.Articulo;
 import Main.WindowManager;
 import java.util.ArrayList;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import javax.swing.event.TableModelEvent;
 import javax.swing.table.DefaultTableModel;
 
 public class JFrame_Articulo extends javax.swing.JFrame {
@@ -23,7 +25,12 @@ public class JFrame_Articulo extends javax.swing.JFrame {
     public void setVisible(boolean visible) {
         super.setVisible(visible);
         if (visible) {
-            this.MostrarTabla();
+            this.idUsuario = WindowManager.getIdUsuario();
+            try {
+                this.MostrarTabla();
+            } catch (Exception ex) {
+                Logger.getLogger(JFrame_Articulo.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
     public JFrame_Articulo() {
@@ -172,40 +179,70 @@ public class JFrame_Articulo extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     // End of variables declaration//GEN-END:variables
-        public void MostrarTabla() {
-            DAOarticuloImplementacion articuloImpl = new DAOarticuloImplementacion();
-            ArrayList<Articulo> articulos = articuloImpl.Seleccionar();
-
-            DefaultTableModel modelo = new DefaultTableModel();
-            
-            modelo.addColumn("IdArticulo");
-            modelo.addColumn("Título");
-            modelo.addColumn("Descripción");
-            modelo.addColumn("Fecha");
-            modelo.addColumn("Autor");
-            modelo.addColumn("Acción"); // Nueva columna con botones
-
-            Table_Articulo.setModel(modelo);
-
-//            JButton btn= new JButton("Ver");
-            
-            for (Articulo articulo : articulos) {
-                if (articulo.isAceptado()) {
-                    Object[] datos = {
-                        articulo.getIdArticulo(),  
-                        articulo.getTitulo(),  // String (Texto normal)
-                        articulo.getDescripcion(),  // String (Texto normal)
-                        articulo.getFecha(),  // String (Texto normal)
-                        articulo.getIdCliente(),  // String (Texto normal)
-                    };
-                    modelo.addRow(datos);
-                }
+    
+    public void MostrarTabla() throws Exception {
+        // Definir las columnas y el tipo de datos correcto para la última columna
+        DefaultTableModel modelo = new DefaultTableModel(
+            new String[]{"Id Articulo", "Titulo", "Descripción", "Favorito"}, 0
+        ) {
+            @Override
+            public Class<?> getColumnClass(int columnIndex) {
+                return columnIndex == 3 ? Boolean.class : String.class; // La última columna es un checkbox
             }
 
-            // Aplicar el renderizador y editor SOLO a la última columna
-            Table_Articulo.getColumnModel().getColumn(5).setCellRenderer(new Render());
-            Table_Articulo.getColumnModel().getColumn(5).setCellEditor(new Editor(new JCheckBox()));
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return column == 3; // Solo la columna de "Asistir" es editable
+            }
+        };
 
+        DAOarticuloImplementacion articuloImpl = new DAOarticuloImplementacion();
+        ArrayList<Articulo> articulos = articuloImpl.Seleccionar();
+
+        for (Articulo articulo : articulos) {
+            if (articulo.isAceptado()) {
+                DAOclientearticuloImplementacion clientearticuloimpl = new DAOclientearticuloImplementacion();
+                boolean favoritoMarcado = clientearticuloimpl.Buscar(articulo.getIdArticulo(), idUsuario);
+                
+                Object[] datos = {
+                    articulo.getIdArticulo(),
+                    articulo.getTitulo(),
+                    articulo.getDescripcion(),
+                    favoritoMarcado
+                };
+                modelo.addRow(datos);
+            }
+        }
+
+        // Asignar el modelo corregido a la tabla
+        Table_Articulo.setModel(modelo);
+        
+        Table_Articulo.getColumnModel().getColumn(3).setCellRenderer(Table_Articulo.getDefaultRenderer(Boolean.class));
+        Table_Articulo.getColumnModel().getColumn(3).setCellEditor(Table_Articulo.getDefaultEditor(Boolean.class));
+        
+        // Agregar listener para detectar cambios en el checkbox
+        modelo.addTableModelListener((TableModelEvent e) -> {
+            if (e.getType() == TableModelEvent.UPDATE) {
+                int row = e.getFirstRow();
+                int column = e.getColumn();
+
+                
+                if (column == 3) { // Solo cuando cambie el checkbox
+                    int idArticulo = (int) modelo.getValueAt(row, 0);
+                    boolean favorito = (boolean) modelo.getValueAt(row, 3);
+                    
+                    // Guardar en la base de datos
+                    DAOclientearticuloImplementacion clientearticuloimpl = new DAOclientearticuloImplementacion();
+                    try {
+                        if(!clientearticuloimpl.Modificar(favorito, idArticulo, idUsuario)){
+                            JOptionPane.showMessageDialog(null, "Modificacion fallida");
+                        }
+                    } catch (Exception ex) {
+                        Logger.getLogger(JFrame_Actividades.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+        });
     }
 
 }
