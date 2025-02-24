@@ -18,6 +18,7 @@ public class Editor extends DefaultCellEditor {
     private int row; // Para identificar la fila
     private JTable table; // Referencia a la tabla
 
+    
     public Editor(JCheckBox checkBox) {
         super(checkBox);
         button = new JButton("Ver");

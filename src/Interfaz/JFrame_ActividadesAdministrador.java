@@ -3,6 +3,8 @@ package Interfaz;
 import CadenaDeResponsabilidad.ValidadorVacio;
 import DAO.DAOactividadImplementacion;
 import Interfaces.Validador;
+import Interfaz.JFrame_Componentes.ButtonEditor;
+import Interfaz.JFrame_Componentes.ButtonRenderer;
 import Interfaz.JFrame_Componentes.Editor;
 import Interfaz.JFrame_Componentes.Render;
 import Logica.Actividad;
@@ -255,11 +257,12 @@ public class JFrame_ActividadesAdministrador extends javax.swing.JFrame {
             datos[6] = (actividad.isAceptado() == false) ? "No" : "Si";
             if ("Si".equals(datos[6])) {
                 modelo.addRow(new Object[]{datos[0], datos[1], datos[2], datos[3], datos[4], datos[5], datos[6], "Ver"});
-                Table_AdministrarActividades.getColumnModel().getColumn(7).setCellRenderer(new Render());
-                Table_AdministrarActividades.getColumnModel().getColumn(7).setCellEditor(new Editor(new JCheckBox()));
             } else {
                 modelo.addRow(new Object[]{datos[0], datos[1], datos[2], datos[3], datos[4], datos[5], datos[6], "-"});
             }
+            
+            Table_AdministrarActividades.getColumn("Asistencias").setCellRenderer(new ButtonRenderer());
+            Table_AdministrarActividades.getColumn("Asistencias").setCellEditor(new ButtonEditor(new JCheckBox()));
         }
     }
 }

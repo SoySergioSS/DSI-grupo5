@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package Interfaz;
 
 import CadenaDeResponsabilidad.ValidadorVacio;
@@ -13,15 +9,8 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
-/**
- *
- * @author Kojiro
- */
 public class JFrame_ArticulosAdministrador extends javax.swing.JFrame {
 
-    /**
-     * Creates new form JFrame_ArticulosAdministrador
-     */
     public JFrame_ArticulosAdministrador() {
         initComponents();
     }
@@ -212,9 +201,6 @@ public class JFrame_ArticulosAdministrador extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_Button_RechazarActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -239,7 +225,6 @@ public class JFrame_ArticulosAdministrador extends javax.swing.JFrame {
         }
         //</editor-fold>
 
-        /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new JFrame_ArticulosAdministrador().setVisible(true);
@@ -270,9 +255,10 @@ public class JFrame_ArticulosAdministrador extends javax.swing.JFrame {
         modelo.addColumn("Descripción");
         modelo.addColumn("fecha");
         modelo.addColumn("IDUsuario");
+        modelo.addColumn("Aceptado");
         Table_AdministrarActividades.setModel(modelo);
 
-        String[] datos = new String[5];
+        String[] datos = new String[6];
 
         for (Articulo articulo : articulos) {
             datos[0] = String.valueOf(articulo.getIdArticulo());
@@ -280,6 +266,7 @@ public class JFrame_ArticulosAdministrador extends javax.swing.JFrame {
             datos[2] = articulo.getDescripcion();
             datos[3] = articulo.getFecha();
             datos[4] = String.valueOf(articulo.getIdCliente());
+            datos[5] = (articulo.isAceptado())? "Si" : "No";
             modelo.addRow(datos);
         }
     }
