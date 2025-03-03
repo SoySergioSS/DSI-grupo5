@@ -86,7 +86,12 @@ public class DAOclienteactividadImplementacion extends Conexion implements DAOcl
 
         try {
             this.conectar();
-            String sql = "SELECT idCliente, idActividad, asistencia FROM TBcliente_actividad WHERE idActividad = ?;";
+            // Consulta corregida para obtener el nombre desde TBcliente
+            String sql = "SELECT c.nombre, ca.idActividad, ca.asistencia "
+                    + "FROM TBcliente_actividad ca "
+                    + "JOIN TBcliente c ON ca.idCliente = c.idCliente "
+                    + // Se une con TBcliente, donde está el nombre
+                    "WHERE ca.idActividad = ?;";
 
             PreparedStatement st = this.conexion.prepareStatement(sql);
             st.setInt(1, idActividad); // Asigna el valor del parámetro
@@ -95,7 +100,7 @@ public class DAOclienteactividadImplementacion extends Conexion implements DAOcl
 
             while (rs.next()) {
                 ClienteActividad ca = new ClienteActividad();
-                ca.setIdCliente(rs.getInt("idCliente"));
+                ca.setNombre(rs.getString("nombre")); // Obtener el nombre del cliente desde TBcliente
                 ca.setIdActividad(rs.getInt("idActividad"));
                 ca.setAsistencia(rs.getBoolean("asistencia"));
                 lista.add(ca);
@@ -111,5 +116,4 @@ public class DAOclienteactividadImplementacion extends Conexion implements DAOcl
 
         return lista;
     }
-
 }

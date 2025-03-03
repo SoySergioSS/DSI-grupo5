@@ -19,7 +19,7 @@ public class EcoVida {
         JFrame_Registro frameRegistro = new JFrame_Registro();
         JFrame_Tiendas frameTiendas = new JFrame_Tiendas();
         JFrame_TiendasAdministrador frameTiendasAdministrador = new JFrame_TiendasAdministrador();
-        JFrame_MostrarArticulo frameMostrarArticulos = new JFrame_MostrarArticulo();
+        JFrame_ArticulosAdministrador frameArticulosAdministrador = new JFrame_ArticulosAdministrador();
         JFrame_ActividadAsistencia frameActividadAsistencia = new JFrame_ActividadAsistencia();
 
         WindowManager.registerWindow("frameActividades", frameActividades);
@@ -36,7 +36,7 @@ public class EcoVida {
         WindowManager.registerWindow("frameRegistro", frameRegistro);
         WindowManager.registerWindow("frameTiendas", frameTiendas);
         WindowManager.registerWindow("frameTiendasAdministrador", frameTiendasAdministrador);
-        WindowManager.registerWindow("frameMostrarArticulos", frameMostrarArticulos);
+        WindowManager.registerWindow("frameArticulosAdministrador", frameArticulosAdministrador);
         WindowManager.registerWindow("frameActividadAsistencia", frameActividadAsistencia);
 
         // Mostrar la ventana inicial

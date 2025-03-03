@@ -187,7 +187,7 @@ public class JFrame_PrincipalAdministrador extends javax.swing.JFrame {
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(IdUsuario1)
-                .addContainerGap(33, Short.MAX_VALUE))
+                .addContainerGap(32, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -238,19 +238,13 @@ public class JFrame_PrincipalAdministrador extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Button_Actividades;
     private javax.swing.JButton Button_Articulos;
-    private javax.swing.JButton Button_CerrarSesion;
     private javax.swing.JButton Button_CerrarSesion1;
-    private javax.swing.JButton Button_Perfil;
     private javax.swing.JButton Button_Tiendas;
-    private javax.swing.JLabel IdUsuario;
     private javax.swing.JLabel IdUsuario1;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     // End of variables declaration//GEN-END:variables
 }

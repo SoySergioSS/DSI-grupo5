@@ -249,10 +249,10 @@ public class JFrame_ActividadesAdministrador extends javax.swing.JFrame {
         modelo.addColumn("fecha");
         modelo.addColumn("Usuario");
         modelo.addColumn("Aceptado");
-        modelo.addColumn("Asistencias");
+        modelo.addColumn("Asistencias");  
         Table_AdministrarActividades.setModel(modelo);
 
-        String[] datos = new String[7];
+        String[] datos = new String[8];
 
         for (Actividad actividad : actividades) {
 
@@ -273,4 +273,5 @@ public class JFrame_ActividadesAdministrador extends javax.swing.JFrame {
             Table_AdministrarActividades.getColumn("Asistencias").setCellEditor(new ButtonEditor(new JCheckBox()));
         }
     }
+
 }

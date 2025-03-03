@@ -4,10 +4,13 @@ import DAO.DAOactividadImplementacion;
 import DAO.DAOclienteactividadImplementacion;
 import Logica.Actividad;
 import Main.WindowManager;
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import javax.swing.UIManager;
 import javax.swing.event.TableModelEvent;
 import javax.swing.table.DefaultTableModel;
 
@@ -173,7 +176,7 @@ public class JFrame_Actividades extends javax.swing.JFrame {
     public void MostrarTabla() throws Exception {
         // Definir las columnas y el tipo de datos correcto para la última columna
         DefaultTableModel modelo = new DefaultTableModel(
-            new String[]{"Id Actividad", "Titulo", "Descripción", "Distrito", "Fecha", "Asistir"}, 0
+                new String[]{"Id Actividad", "Titulo", "Descripción", "Distrito", "Fecha", "Asistir"}, 0
         ) {
             @Override
             public Class<?> getColumnClass(int columnIndex) {
@@ -193,7 +196,7 @@ public class JFrame_Actividades extends javax.swing.JFrame {
             if (actividad.isAceptado()) {
                 DAOclienteactividadImplementacion clienteactividadimpl = new DAOclienteactividadImplementacion();
                 boolean asistenciaMarcada = clienteactividadimpl.Buscar(actividad.getIdActividad(), idUsuario);
-                
+
                 Object[] datos = {
                     actividad.getIdActividad(),
                     actividad.getTitulo(),
@@ -208,26 +211,27 @@ public class JFrame_Actividades extends javax.swing.JFrame {
 
         // Asignar el modelo corregido a la tabla
         Table_Actividades.setModel(modelo);
-        
+
         Table_Actividades.getColumnModel().getColumn(5).setCellRenderer(Table_Actividades.getDefaultRenderer(Boolean.class));
         Table_Actividades.getColumnModel().getColumn(5).setCellEditor(Table_Actividades.getDefaultEditor(Boolean.class));
-        
+
         // Agregar listener para detectar cambios en el checkbox
         modelo.addTableModelListener((TableModelEvent e) -> {
             if (e.getType() == TableModelEvent.UPDATE) {
                 int row = e.getFirstRow();
                 int column = e.getColumn();
 
-                
                 if (column == 5) { // Solo cuando cambie el checkbox
                     int idActividad = (int) modelo.getValueAt(row, 0);
                     boolean asistencia = (boolean) modelo.getValueAt(row, 5);
-                    
+
                     // Guardar en la base de datos
                     DAOclienteactividadImplementacion clienteactividadimpl = new DAOclienteactividadImplementacion();
                     try {
-                        if(!clienteactividadimpl.Modificar(asistencia, idActividad, idUsuario)){
+                        if (!clienteactividadimpl.Modificar(asistencia, idActividad, idUsuario)) {
                             JOptionPane.showMessageDialog(null, "Modificacion fallida");
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Asistencia actualizada");
                         }
                     } catch (Exception ex) {
                         Logger.getLogger(JFrame_Actividades.class.getName()).log(Level.SEVERE, null, ex);

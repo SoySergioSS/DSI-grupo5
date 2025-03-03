@@ -176,6 +176,8 @@ public class JFrame_ArticulosAdministrador extends javax.swing.JFrame {
             DAOarticuloImplementacion articuloImpl = new DAOarticuloImplementacion();
             articuloImpl.Modificar(Integer.parseInt(Text_IdActividad.getText().trim()));
 
+            JOptionPane.showMessageDialog(null, "Articulo aceptado");
+            
             this.MostrarTabla();
 
         }catch(Exception e){
@@ -193,6 +195,7 @@ public class JFrame_ArticulosAdministrador extends javax.swing.JFrame {
             if(articuloImpl.Eliminar(Integer.parseInt(Text_IdActividad.getText().trim())) == false){
                 JOptionPane.showMessageDialog(null, "El ID de esa actividad no existe");
             }else{
+                JOptionPane.showMessageDialog(null, "Articulo rechazado");
                 this.MostrarTabla();
             }
 

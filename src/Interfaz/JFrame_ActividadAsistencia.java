@@ -181,14 +181,14 @@ public class JFrame_ActividadAsistencia extends javax.swing.JFrame {
         DefaultTableModel modelo = new DefaultTableModel();
 
         modelo.addColumn("IdActividad");
-        modelo.addColumn("IdCliente");
+        modelo.addColumn("NombreCliente");
         Tabla_Asistencias.setModel(modelo);
 
-        Integer[] datos = new Integer[2];
+        Object[] datos = new Object[2];
 
         for(ClienteActividad relacion : asistencias){
             datos[0] = relacion.getIdActividad();
-            datos[1] = relacion.getIdCliente();
+            datos[1] = relacion.getNombre();
             modelo.addRow(datos);
         }
     }
