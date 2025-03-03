@@ -54,11 +54,11 @@ CREATE TABLE TBarticulo (
 );
 
 CREATE TABLE TBarticulo_favorito (
-    idArticulo_favorito INT AUTO_INCREMENT PRIMARY KEY,
     idCliente INT NOT NULL,
     idArticulo INT NOT NULL,
+    favorito BIT NOT NULL DEFAULT 0,
     -- fechaMarcado DATETIME DEFAULT GETDATE(),
-    FOREIGN KEY (idCliente) REFERENCES TBusuario(idUsuario) ON DELETE CASCADE,
+    FOREIGN KEY (idCliente) REFERENCES TBcliente(idUsuario) ON DELETE CASCADE,
     FOREIGN KEY (idArticulo) REFERENCES TBarticulo(idArticulo) ON DELETE CASCADE
 );
 
@@ -78,4 +78,13 @@ CREATE TABLE TBcliente_articulo (
     PRIMARY KEY (idCliente, idArticulo),
     FOREIGN KEY (idCliente) REFERENCES TBcliente(idCliente) ON DELETE CASCADE,
     FOREIGN KEY (idArticulo) REFERENCES TBarticulo(idArticulo) ON DELETE CASCADE
+);
+
+CREATE TABLE TBactividad_favorito (
+    idCliente INT NOT NULL,
+    idActividad INT NOT NULL,
+    favorito BIT NOT NULL DEFAULT 0,
+    -- fechaMarcado DATETIME DEFAULT GETDATE(),
+    FOREIGN KEY (idCliente) REFERENCES TBcliente(idUsuario) ON DELETE CASCADE,
+    FOREIGN KEY (idActividad) REFERENCES TBactividad(idActividad) ON DELETE CASCADE
 );
