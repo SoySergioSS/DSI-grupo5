@@ -2,6 +2,7 @@ package DAO;
 
 import Interfaces.DAOactividad;
 import Logica.Actividad;
+import Logica.Articulo;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -105,6 +106,43 @@ public class DAOactividadImplementacion extends Conexion implements DAOactividad
             st.close();
         } catch (Exception e) {
             System.err.println("Error: " + e.getMessage());
+        }
+
+        return actividades;
+    }
+    
+    @Override
+    public Actividad SeleccionarD(int idActividad) throws SQLException {
+        Actividad actividades = new Actividad();
+
+        try {
+            this.conectar();
+            String sql = "SELECT a.idActividad, a.titulo, a.descripcion, a.fecha, a.distrito, c.nombre AS nombreUsuario "
+                    + "FROM TBactividad a "
+                    + "INNER JOIN TBcliente c ON a.idCliente = c.idCliente "
+                    + "WHERE a.idActividad = ?;";
+
+            PreparedStatement st = this.conexion.prepareStatement(sql);
+            st.setInt(1, idActividad); // Evita inyección SQL
+
+            ResultSet rs = st.executeQuery();
+
+            while (rs.next()) {
+                actividades.setIdActividad(rs.getInt("idActividad"));
+                actividades.setTitulo(rs.getString("titulo"));
+                actividades.setDescripcion(rs.getString("descripcion"));
+                actividades.setFecha(rs.getString("fecha"));
+                actividades.setDistrito(rs.getString("distrito"));
+                actividades.setNombreCliente(rs.getString("nombreUsuario")); // <-- Agregado
+
+            }
+
+            rs.close();
+            st.close();
+        } catch (Exception e) {
+            System.err.println("Error: " + e.getMessage());
+        } finally {
+            this.cerrar();
         }
 
         return actividades;

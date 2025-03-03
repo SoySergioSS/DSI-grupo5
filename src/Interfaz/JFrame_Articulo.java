@@ -233,8 +233,7 @@ public class JFrame_Articulo extends javax.swing.JFrame {
 
         // Aplicar el renderizador y editor SOLO a la última columna
         Table_Articulo.getColumnModel().getColumn(5).setCellRenderer(new Render());
-        Table_Articulo.getColumnModel().getColumn(5).setCellEditor(new Editor(new JCheckBox()));
+        Table_Articulo.getColumnModel().getColumn(5).setCellEditor(new Editor(new JCheckBox(), "frameMostrarArticulo"));
 
     }
-
 }

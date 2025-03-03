@@ -1,15 +1,25 @@
 package Interfaz;
 
 import DAO.DAOarticuloImplementacion;
+import DAO.DAOarticulofavoritoImplementacion;
 import Logica.Articulo;
 import Main.WindowManager;
+import java.awt.Color;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 public class JFrame_MostrarArticulo extends javax.swing.JFrame {
 
     private int idArticulo;
+    private int idUsuario;
 
     public void setidArticulo(int idArticulo) {
         this.idArticulo = idArticulo;
+    }
+
+    public void getIdUsuario(int idUsuario) {
+        this.idUsuario = idUsuario;
     }
 
     @Override
@@ -17,7 +27,12 @@ public class JFrame_MostrarArticulo extends javax.swing.JFrame {
         super.setVisible(visible);
         if (visible) {
             this.idArticulo = WindowManager.getIdArticulo();
-            MostrarArticulo();
+            this.idUsuario = WindowManager.getIdUsuario();
+            try {
+                MostrarArticulo();
+            } catch (Exception ex) {
+                Logger.getLogger(JFrame_MostrarArticulo.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 
@@ -44,6 +59,7 @@ public class JFrame_MostrarArticulo extends javax.swing.JFrame {
         Text_Fecha = new javax.swing.JLabel();
         Button_Regresar = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
+        Button_favorito = new javax.swing.JButton();
 
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
@@ -81,6 +97,13 @@ public class JFrame_MostrarArticulo extends javax.swing.JFrame {
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/logo-principal.png"))); // NOI18N
         jLabel2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
+        Button_favorito.setText("Favorito");
+        Button_favorito.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Button_favoritoActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -101,6 +124,10 @@ public class JFrame_MostrarArticulo extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel2)))
                 .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(Button_favorito)
+                .addGap(110, 110, 110))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -117,7 +144,9 @@ public class JFrame_MostrarArticulo extends javax.swing.JFrame {
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(Text_Usuario)
-                .addContainerGap(94, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 42, Short.MAX_VALUE)
+                .addComponent(Button_favorito)
+                .addGap(29, 29, 29))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -138,6 +167,22 @@ public class JFrame_MostrarArticulo extends javax.swing.JFrame {
         this.dispose();
         WindowManager.showWindow("frameArticulo");
     }//GEN-LAST:event_Button_RegresarActionPerformed
+
+    private void Button_favoritoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Button_favoritoActionPerformed
+        DAOarticulofavoritoImplementacion articuloFav = new DAOarticulofavoritoImplementacion();
+        try {
+            boolean favorito = !articuloFav.Buscar(idArticulo, idUsuario);
+            articuloFav.Modificar(favorito, idArticulo, idUsuario);
+            if(favorito){
+                JOptionPane.showMessageDialog(null, "Agregado a favoritos");
+            }else{
+                JOptionPane.showMessageDialog(null, "Eliminado de favoritos");
+            }
+            MostrarArticulo();
+        } catch (Exception ex) {
+            Logger.getLogger(JFrame_MostrarArticulo.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_Button_favoritoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -176,6 +221,7 @@ public class JFrame_MostrarArticulo extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Button_Regresar;
+    private javax.swing.JButton Button_favorito;
     private javax.swing.JTextArea Text_Descripcion;
     private javax.swing.JLabel Text_Fecha;
     private javax.swing.JLabel Text_Titulo;
@@ -186,7 +232,7 @@ public class JFrame_MostrarArticulo extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextArea jTextArea1;
     // End of variables declaration//GEN-END:variables
-    public void MostrarArticulo() {
+    public void MostrarArticulo() throws Exception {
         try {
             DAOarticuloImplementacion articuloImpl = new DAOarticuloImplementacion();
 
@@ -204,6 +250,16 @@ public class JFrame_MostrarArticulo extends javax.swing.JFrame {
             }
         } catch (Exception e) {
             System.err.println("Error al mostrar artículo: " + e.getMessage());
+        }
+
+        DAOarticulofavoritoImplementacion articuloFav = new DAOarticulofavoritoImplementacion();
+        if (articuloFav.Buscar(idArticulo, idUsuario)) {
+            Button_favorito.setBackground(Color.yellow);
+            Button_favorito.setText("Eliminar de favoritos");
+        } else {
+            Button_favorito.setBackground(Color.white);
+            Button_favorito.setText("Eliminar de favoritos");
+            Button_favorito.setText("Agregar a favoritos");
         }
     }
 

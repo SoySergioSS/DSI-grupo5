@@ -1,7 +1,5 @@
-
 package Interfaz.JFrame_Componentes;
 
-import Interfaz.JFrame_MostrarArticulo;
 import Main.WindowManager;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
@@ -16,10 +14,11 @@ public class Editor extends DefaultCellEditor {
     private boolean clicked;
     private int row; // Para identificar la fila
     private JTable table; // Referencia a la tabla
+    private String frameDestino; // Ventana a la que redirige
 
-    
-    public Editor(JCheckBox checkBox) {
+    public Editor(JCheckBox checkBox, String frameDestino) {
         super(checkBox);
+        this.frameDestino = frameDestino; // Asignar ventana destino
         button = new JButton("Ver");
         button.addActionListener(new ActionListener() {
             @Override
@@ -40,10 +39,11 @@ public class Editor extends DefaultCellEditor {
     @Override
     public Object getCellEditorValue() {
         if (clicked) {
-            int idArticulo = (int) table.getValueAt(row, 0); // Obtiene el ID del artículo en la fila
+            int id = (int) table.getValueAt(row, 0); // Obtiene el ID del artículo en la fila
             
-            WindowManager.setIdArticulo(idArticulo);
-            WindowManager.showWindow("frameMostrarArticulos");
+            WindowManager.setIdArticulo(id);
+            WindowManager.setIdActividad(id);
+            WindowManager.showWindow(frameDestino); // Redirige a la ventana especificada
         }
         clicked = false;
         return "Ver"; // Mantiene el texto del botón
@@ -55,4 +55,3 @@ public class Editor extends DefaultCellEditor {
         return super.stopCellEditing();
     }
 }
-

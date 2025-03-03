@@ -9,6 +9,17 @@ public class Actividad {
     private String distrito;
     private boolean aceptado;
     private int idCliente;
+    private String nombreCliente;
+
+    public String getNombreCliente() {
+        return nombreCliente;
+    }
+
+    public void setNombreCliente(String nombreCliente) {
+        this.nombreCliente = nombreCliente;
+    }
+    
+    
 
     public void setIdActividad(int idActividad) {
         this.idActividad = idActividad;

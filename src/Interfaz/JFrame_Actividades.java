@@ -2,16 +2,14 @@ package Interfaz;
 
 import DAO.DAOactividadImplementacion;
 import DAO.DAOclienteactividadImplementacion;
+import Interfaz.JFrame_Componentes.Editor;
+import Interfaz.JFrame_Componentes.Render;
 import Logica.Actividad;
 import Main.WindowManager;
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.ImageIcon;
-import javax.swing.JOptionPane;
-import javax.swing.UIManager;
-import javax.swing.event.TableModelEvent;
+import javax.swing.JCheckBox;
 import javax.swing.table.DefaultTableModel;
 
 public class JFrame_Actividades extends javax.swing.JFrame {
@@ -195,49 +193,21 @@ public class JFrame_Actividades extends javax.swing.JFrame {
         for (Actividad actividad : actividades) {
             if (actividad.isAceptado()) {
                 DAOclienteactividadImplementacion clienteactividadimpl = new DAOclienteactividadImplementacion();
-                boolean asistenciaMarcada = clienteactividadimpl.Buscar(actividad.getIdActividad(), idUsuario);
 
                 Object[] datos = {
                     actividad.getIdActividad(),
                     actividad.getTitulo(),
                     actividad.getDescripcion(),
                     actividad.getDistrito(),
-                    actividad.getFecha(),
-                    asistenciaMarcada // Iniciamos el checkbox en "false" (no asistió)
-                };
+                    actividad.getFecha(),};
                 modelo.addRow(datos);
             }
         }
 
         // Asignar el modelo corregido a la tabla
         Table_Actividades.setModel(modelo);
-
-        Table_Actividades.getColumnModel().getColumn(5).setCellRenderer(Table_Actividades.getDefaultRenderer(Boolean.class));
-        Table_Actividades.getColumnModel().getColumn(5).setCellEditor(Table_Actividades.getDefaultEditor(Boolean.class));
-
-        // Agregar listener para detectar cambios en el checkbox
-        modelo.addTableModelListener((TableModelEvent e) -> {
-            if (e.getType() == TableModelEvent.UPDATE) {
-                int row = e.getFirstRow();
-                int column = e.getColumn();
-
-                if (column == 5) { // Solo cuando cambie el checkbox
-                    int idActividad = (int) modelo.getValueAt(row, 0);
-                    boolean asistencia = (boolean) modelo.getValueAt(row, 5);
-
-                    // Guardar en la base de datos
-                    DAOclienteactividadImplementacion clienteactividadimpl = new DAOclienteactividadImplementacion();
-                    try {
-                        if (!clienteactividadimpl.Modificar(asistencia, idActividad, idUsuario)) {
-                            JOptionPane.showMessageDialog(null, "Modificacion fallida");
-                        } else {
-                            JOptionPane.showMessageDialog(null, "Asistencia actualizada");
-                        }
-                    } catch (Exception ex) {
-                        Logger.getLogger(JFrame_Actividades.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-            }
-        });
+        Table_Actividades.getColumnModel().getColumn(5).setCellRenderer(new Render());
+        Table_Actividades.getColumnModel().getColumn(5).setCellEditor(new Editor(new JCheckBox(), "frameMostrarActividad"));
+    
     }
 }
